@@ -8,6 +8,9 @@ CPP_SOURCES = TimeMachine.cpp time_machine_hardware.cpp
 LIBDAISY_DIR = ../DaisyExamples/libDaisy/
 DAISYSP_DIR = ../DaisyExamples/DaisySP/
 
+USE_DAISYSP_LGPL=1
+C_INCLUDES += ${echo | gcc -xc++ -E -v - 2>&1 | grep '^\s*/' | awk '{ print $1 }'}
+
 # Core location, and generic Makefile.
 SYSTEM_FILES_DIR = $(LIBDAISY_DIR)/core
 include $(SYSTEM_FILES_DIR)/Makefile
