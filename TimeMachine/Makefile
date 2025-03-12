@@ -1,6 +1,8 @@
 # Project Name
 TARGET = TimeMachine
 
+USE_DAISYSP_LGPL=1
+
 # Sources
 CPP_SOURCES = TimeMachine.cpp time_machine_hardware.cpp
 
