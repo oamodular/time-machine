@@ -12,7 +12,7 @@ int seconds_to_samples(float x, float sampleRate) {
 }
 
 float mix(float x, float a, float b) {
-    return x*(1-x) + b*x;
+    return a*(1-x) + b*x;
 }
 
 float clamp(float x, float a, float b) {
