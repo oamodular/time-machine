@@ -64,6 +64,8 @@ float skewKnob = 0.0;
 float drySlider = 0.0;
 float delaySliders = 0.0;
 
+float vcaIn[9];
+
 // calibration offsets for CV
 float timeCvOffset = 0.0;
 float feedbackCvOffset = 0.0;
@@ -98,7 +100,16 @@ void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, s
 	timeCv = clamp(hw.GetAdcValue(TIME_CV) - timeCvOffset, -1, 1);
 	feedbackCv = clamp(hw.GetAdcValue(FEEDBACK_CV) - feedbackCvOffset, -1, 1);
 	skewCv = clamp(hw.GetAdcValue(SKEW_CV) - skewCvOffset, -1, 1);
-
+	vcaIn[0] = clamp(hw.GetAdcValue(DRY_VCA), 0, 1);
+	vcaIn[1] = 1.0;
+	vcaIn[2] = 1.0;
+	vcaIn[3] = 1.0;
+	vcaIn[4] = 1.0;
+	vcaIn[5] = 1.0;
+	vcaIn[6] = 1.0;
+	vcaIn[7] = 1.0;
+	vcaIn[8] = clamp(hw.GetAdcValue(CV_7), 0, 1);
+	
 	drySlider = minMaxSlider(1.0 - hw.GetAdcValue(DRY_SLIDER));
 
 	// calculate time based on clock if present, otherwise simple time
@@ -147,20 +158,20 @@ void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, s
 	}
 
 	// set time machine dry slider value, feedback, "blur" which is semi-deprecated
-	timeMachine.Set(drySlider, feedback, feedback); // controlling "blur" with feedback now???
+	timeMachine.Set(drySlider * hw.GetVcaValue(0), feedback, feedback); // controlling "blur" with feedback now???
 
 	for(int i=1; i<9; i++) {
 		// let last 8 slider time/amp/blur values for left channel time machine instance
         timeMachine.timeMachineLeft.readHeads[i-1].Set(
             spread((i / 8.0), distribution) * time,
-            max(0.0f, minMaxSlider(1.0f - hw.GetSliderValue(i))),
-			max(0., feedback-1.0)
+            max(0.0f, minMaxSlider((1.0f - hw.GetSliderValue(i)) * hw.GetVcaValue(i))),
+						max(0., feedback-1.0)
         );
 		// let last 8 slider time/amp/blur values for right channel time machine instance
 		timeMachine.timeMachineRight.readHeads[i-1].Set(
             spread((i / 8.0), distribution) * time,
-            max(0.0f, minMaxSlider(1.0f - hw.GetSliderValue(i))),
-			max(0., feedback-1.0)
+            max(0.0f, minMaxSlider((1.0f - hw.GetSliderValue(i)) * hw.GetVcaValue(i))),
+						max(0., feedback-1.0)
         );
 	}
 
@@ -198,7 +209,7 @@ bool shouldCalibrate() {
 int main(void)
 {
 	// init time machine hardware
-    hw.Init();
+	hw.Init();
 	hw.SetAudioBlockSize(4); // number of samples handled per callback
 
 	dsy_gpio_pin gatePin = DaisyPatchSM::B9;
@@ -210,12 +221,7 @@ int main(void)
 	leds[2].Init(DaisyPatchSM::D3, false);
 	leds[3].Init(DaisyPatchSM::D4, false);
 	leds[4].Init(DaisyPatchSM::D5, false);
-	// hacky selector for my weird dev version (Eris)
-	#if BODGE
-	leds[5].Init(DaisyPatchSM::B8, false);
-	#else
 	leds[5].Init(DaisyPatchSM::A9, false);
-	#endif
 	leds[6].Init(DaisyPatchSM::D10, false);
 	leds[7].Init(DaisyPatchSM::D7, false);
 	leds[8].Init(DaisyPatchSM::D6, false);

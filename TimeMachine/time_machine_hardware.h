@@ -1,7 +1,5 @@
 #pragma once
 
-#define BODGE false
-
 #include "daisy.h"
 #include "daisy_patch_sm.h"
 
@@ -18,6 +16,9 @@ using namespace patch_sm;
 
 #define DRY_SLIDER ADC_11
 #define DELAY_SLIDERS ADC_12
+
+#define DRY_VCA CV_4
+#define DELAY_VCAS CV_5
 
 namespace oam
 {
@@ -156,6 +157,8 @@ namespace time_machine
         float GetAdcValue(int idx);
 
         float GetSliderValue(int idx);
+
+        float GetVcaValue(int idx);
 
         /** Returns the STM32 port/pin combo for the desired pin (or an invalid pin for HW only pins)
          *

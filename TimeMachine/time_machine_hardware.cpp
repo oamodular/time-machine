@@ -323,26 +323,22 @@ namespace time_machine
 
         for(int i = 0; i < ADC_LAST; i++)
         {
-            if(i < ADC_12) {
-                adc_config[i].InitSingle(adc_pins[i]);
-            } else {
-                #if BODGE
-                //eris
+            if(i == 4) {
                 adc_config[i].InitMux(
                     adc_pins[i], 8,
-                    TimeMachineHardware::A8,
-                    TimeMachineHardware::A9,
-                    TimeMachineHardware::B6
+                    TimeMachineHardware::B7,
+                    TimeMachineHardware::B8,
+                    TimeMachineHardware::C10
                 );
-                #else
-                //liv
+            } else if(i < ADC_12) {
+                adc_config[i].InitSingle(adc_pins[i]);
+            } else {
                 adc_config[i].InitMux(
                     adc_pins[i], 8,
                     TimeMachineHardware::A8,
                     TimeMachineHardware::B6,
                     TimeMachineHardware::B5
                 );
-                #endif
             }
         }
         adc.Init(adc_config, ADC_LAST);
@@ -491,15 +487,19 @@ namespace time_machine
     float TimeMachineHardware::GetAdcValue(int idx) { return controls[idx].Value(); }
 
     float TimeMachineHardware::GetSliderValue(int idx) {
-        #if BODGE
-        const int muxMapping[] = {0,1,2,5,4,6,7,3};
-        #else
         const int muxMapping[] = {0,1,4,3,2,6,7,5};
-        #endif
         if(idx==0) {
             return adc.GetFloat(DRY_SLIDER);
         } else {
             return adc.GetMuxFloat(DELAY_SLIDERS, muxMapping[idx - 1]);
+        }
+    }
+
+    float TimeMachineHardware::GetVcaValue(int idx) {
+        if(idx==0) {
+            return adc.GetFloat(DRY_VCA);
+        } else {
+            return adc.GetMuxFloat(DELAY_VCAS, idx - 1);
         }
     }
 
