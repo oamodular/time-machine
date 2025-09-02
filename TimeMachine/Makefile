@@ -1,3 +1,5 @@
+USE_DAISYSP_LGPL=1
+
 # Project Name
 TARGET = TimeMachine
 
