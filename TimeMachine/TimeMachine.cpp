@@ -331,10 +331,10 @@ int main(void)
 		hw.PrintLine("GATE IN: %d", hw.gate_in_2.State());
 
 		hw.PrintLine("GATE IN: %d", hw.gate_in_1.State());
-		hw.PrintLine("CV IN 1: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_4)));
-		hw.PrintLine("CV IN 2: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_5)));
-		hw.PrintLine("CV IN 3: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_6)));
-		hw.PrintLine("CV IN 4: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_7)));
+		hw.PrintLine("CV IN 4: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_4)));
+		hw.PrintLine("CV IN 5: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_5)));
+		hw.PrintLine("CV IN 6: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_6)));
+		hw.PrintLine("CV IN 7: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_7)));
 
 		hw.PrintLine("TIME_CAL: " FLT_FMT(6), FLT_VAR(6, savedCalibrationData.timeCvOffset));
 		hw.PrintLine("FEEDBACK_CAL: " FLT_FMT(6), FLT_VAR(6, savedCalibrationData.feedbackCvOffset));
@@ -351,8 +351,13 @@ int main(void)
 
 		hw.PrintLine("DROPPED FRAMES: %d", droppedFrames);
 
+
 		for(int i=0; i<9; i++) {
-			hw.PrintLine("%d: " FLT_FMT(6), i, FLT_VAR(6, minMaxSlider(1.0 - hw.GetSliderValue(i))));
+			hw.PrintLine("VCA %d: " FLT_FMT(6), i, FLT_VAR(6, hw.GetVcaValue(i)));
+		}
+
+		for(int i=0; i<9; i++) {
+			hw.PrintLine("Slider %d: " FLT_FMT(6), i, FLT_VAR(6, minMaxSlider(1.0 - hw.GetSliderValue(i))));
 		}
 
 		hw.PrintLine("");

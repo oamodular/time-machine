@@ -123,50 +123,50 @@ namespace time_machine
     class TimeMachineHardware::Impl
     {
       public:
-        Impl()
-        {
-            dac_running_            = false;
-            dac_buffer_size_        = 48;
-            dac_output_[0]          = 0;
-            dac_output_[1]          = 0;
-            internal_dac_buffer_[0] = dsy_patch_sm_dac_buffer[0];
-            internal_dac_buffer_[1] = dsy_patch_sm_dac_buffer[1];
-        }
+        // Impl()
+        // {
+        //     dac_running_            = false;
+        //     dac_buffer_size_        = 48;
+        //     dac_output_[0]          = 0;
+        //     dac_output_[1]          = 0;
+        //     internal_dac_buffer_[0] = dsy_patch_sm_dac_buffer[0];
+        //     internal_dac_buffer_[1] = dsy_patch_sm_dac_buffer[1];
+        // }
 
-        void InitDac();
+        // void InitDac();
 
-        void StartDac(DacHandle::DacCallback callback);
+        // void StartDac(DacHandle::DacCallback callback);
 
-        void StopDac();
+      //   void StopDac();
 
-        static void InternalDacCallback(uint16_t **output, size_t size);
+      //   static void InternalDacCallback(uint16_t **output, size_t size);
 
-        /** Based on a 0-5V output with a 0-4095 12-bit DAC */
-        static inline uint16_t VoltageToCode(float input)
-        {
-            float pre = input * 819.f;
-            if(pre > 4095.f)
-                pre = 4095.f;
-            else if(pre < 0.f)
-                pre = 0.f;
-            return (uint16_t)pre;
-        }
+      //   /** Based on a 0-5V output with a 0-4095 12-bit DAC */
+      //   static inline uint16_t VoltageToCode(float input)
+      //   {
+      //       float pre = input * 819.f;
+      //       if(pre > 4095.f)
+      //           pre = 4095.f;
+      //       else if(pre < 0.f)
+      //           pre = 0.f;
+      //       return (uint16_t)pre;
+      //   }
 
-        inline void WriteCvOut(int channel, float voltage)
-        {
-            if(channel == 0 || channel == 1)
-                dac_output_[0] = VoltageToCode(voltage);
-            if(channel == 0 || channel == 2)
-                dac_output_[1] = VoltageToCode(voltage);
-        }
+      //   inline void WriteCvOut(int channel, float voltage)
+      //   {
+      //       if(channel == 0 || channel == 1)
+      //           dac_output_[0] = VoltageToCode(voltage);
+      //       if(channel == 0 || channel == 2)
+      //           dac_output_[1] = VoltageToCode(voltage);
+      //   }
 
-        size_t    dac_buffer_size_;
-        uint16_t *internal_dac_buffer_[2];
-        uint16_t  dac_output_[2];
-        DacHandle dac_;
+      //   size_t    dac_buffer_size_;
+      //   uint16_t *internal_dac_buffer_[2];
+      //   uint16_t  dac_output_[2];
+      //   DacHandle dac_;
 
-      private:
-        bool dac_running_;
+      // private:
+      //   bool dac_running_;
     };
 
     /** Static Local Object */
@@ -174,47 +174,47 @@ namespace time_machine
 
     /** Impl function definintions */
 
-    void TimeMachineHardware::Impl::InitDac()
-    {
-        DacHandle::Config dac_config;
-        dac_config.mode     = DacHandle::Mode::DMA;
-        dac_config.bitdepth = DacHandle::BitDepth::
-            BITS_12; /**< Sets the output value to 0-4095 */
-        dac_config.chn               = DacHandle::Channel::BOTH;
-        dac_config.buff_state        = DacHandle::BufferState::ENABLED;
-        dac_config.target_samplerate = 48000;
-        dac_.Init(dac_config);
-    }
+    // void TimeMachineHardware::Impl::InitDac()
+    // {
+    //     DacHandle::Config dac_config;
+    //     dac_config.mode     = DacHandle::Mode::DMA;
+    //     dac_config.bitdepth = DacHandle::BitDepth::
+    //         BITS_12; /**< Sets the output value to 0-4095 */
+    //     dac_config.chn               = DacHandle::Channel::BOTH;
+    //     dac_config.buff_state        = DacHandle::BufferState::ENABLED;
+    //     dac_config.target_samplerate = 48000;
+    //     dac_.Init(dac_config);
+    // }
 
-    void TimeMachineHardware::Impl::StartDac(DacHandle::DacCallback callback)
-    {
-        if(dac_running_)
-            dac_.Stop();
-        dac_.Start(internal_dac_buffer_[0],
-                   internal_dac_buffer_[1],
-                   dac_buffer_size_,
-                   callback == nullptr ? InternalDacCallback : callback);
-        dac_running_ = true;
-    }
+    // void TimeMachineHardware::Impl::StartDac(DacHandle::DacCallback callback)
+    // {
+    //     if(dac_running_)
+    //         dac_.Stop();
+    //     dac_.Start(internal_dac_buffer_[0],
+    //                internal_dac_buffer_[1],
+    //                dac_buffer_size_,
+    //                callback == nullptr ? InternalDacCallback : callback);
+    //     dac_running_ = true;
+    // }
 
-    void TimeMachineHardware::Impl::StopDac()
-    {
-        dac_.Stop();
-        dac_running_ = false;
-    }
+    // void TimeMachineHardware::Impl::StopDac()
+    // {
+    //     dac_.Stop();
+    //     dac_running_ = false;
+    // }
 
 
-    void TimeMachineHardware::Impl::InternalDacCallback(uint16_t **output, size_t size)
-    {
-        /** We could add some smoothing, interp, or something to make this a bit less waste-y */
-        // std::fill(&output[0][0], &output[0][size], patch_sm_hw.dac_output_[0]);
-        // std::fill(&output[1][1], &output[1][size], patch_sm_hw.dac_output_[1]);
-        for(size_t i = 0; i < size; i++)
-        {
-            output[0][i] = patch_sm_hw.dac_output_[0];
-            output[1][i] = patch_sm_hw.dac_output_[1];
-        }
-    }
+    // void TimeMachineHardware::Impl::InternalDacCallback(uint16_t **output, size_t size)
+    // {
+    //     /** We could add some smoothing, interp, or something to make this a bit less waste-y */
+    //     // std::fill(&output[0][0], &output[0][size], patch_sm_hw.dac_output_[0]);
+    //     // std::fill(&output[1][1], &output[1][size], patch_sm_hw.dac_output_[1]);
+    //     for(size_t i = 0; i < size; i++)
+    //     {
+    //         output[0][i] = patch_sm_hw.dac_output_[0];
+    //         output[1][i] = patch_sm_hw.dac_output_[1];
+    //     }
+    // }
 
     /** Actual TimeMachineHardware implementation 
  *  With the pimpl model in place, we can/should probably
@@ -321,26 +321,36 @@ namespace time_machine
             PIN_ADC_CTRL_12
         };
 
-        for(int i = 0; i < ADC_LAST; i++)
+       
+        for (int i = 0; i < ADC_LAST; i++)
         {
-            if(i == 4) {
-                adc_config[i].InitMux(
-                    adc_pins[i], 8,
-                    TimeMachineHardware::B7,
-                    TimeMachineHardware::B8,
-                    TimeMachineHardware::C10
-                );
-            } else if(i < ADC_12) {
-                adc_config[i].InitSingle(adc_pins[i]);
-            } else {
-                adc_config[i].InitMux(
-                    adc_pins[i], 8,
-                    TimeMachineHardware::A8,
-                    TimeMachineHardware::B6,
-                    TimeMachineHardware::B5
-                );
+            switch (i)
+            {
+                case CV_5:
+                    adc_config[i].InitMux(
+                        adc_pins[i], 8,
+                        TimeMachineHardware::B7,
+                        TimeMachineHardware::B8,
+                        TimeMachineHardware::C10
+                    );
+                    break;
+
+                case ADC_12:
+                    adc_config[i].InitMux(
+                        adc_pins[i], 8,
+                        TimeMachineHardware::A8,
+                        TimeMachineHardware::B6,
+                        TimeMachineHardware::B5
+                    );
+                    break;
+
+                default:
+                    adc_config[i].InitSingle(adc_pins[i]);
+                    break;
             }
         }
+
+
         adc.Init(adc_config, ADC_LAST);
         /** Control Init */
         for(size_t i = 0; i < ADC_LAST; i++)
@@ -382,11 +392,11 @@ namespace time_machine
         */
 
         /** DAC init */
-        pimpl_->InitDac();
+        // pimpl_->InitDac();
 
         /** Start any background stuff */
         StartAdc();
-        StartDac();
+        // StartDac();
     }
 
     void TimeMachineHardware::StartAudio(AudioHandle::AudioCallback cb)
@@ -511,17 +521,17 @@ namespace time_machine
             return kPinMap[static_cast<int>(bank)][idx - 1];
     }
 
-    void TimeMachineHardware::StartDac(DacHandle::DacCallback callback)
-    {
-        pimpl_->StartDac(callback);
-    }
+    // void TimeMachineHardware::StartDac(DacHandle::DacCallback callback)
+    // {
+    //     pimpl_->StartDac(callback);
+    // }
 
-    void TimeMachineHardware::StopDac() { pimpl_->StopDac(); }
+    // void TimeMachineHardware::StopDac() { pimpl_->StopDac(); }
 
-    void TimeMachineHardware::WriteCvOut(const int channel, float voltage)
-    {
-        pimpl_->WriteCvOut(channel, voltage);
-    }
+    // void TimeMachineHardware::WriteCvOut(const int channel, float voltage)
+    // {
+    //     pimpl_->WriteCvOut(channel, voltage);
+    // }
 
     void TimeMachineHardware::SetLed(bool state) { dsy_gpio_write(&user_led, state); }
 

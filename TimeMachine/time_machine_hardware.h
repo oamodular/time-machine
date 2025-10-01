@@ -178,12 +178,12 @@ namespace time_machine
          * 
          *  This is started automatically when Init() is called.
          */
-        void StartDac(DacHandle::DacCallback callback = nullptr);
+        // void StartDac(DacHandle::DacCallback callback = nullptr);
 
         /** Stop the DAC from updating. 
          *  This will suspend the CV Outputs from changing 
          */
-        void StopDac();
+        // void StopDac();
 
         /** Sets specified DAC channel to the target voltage. 
          *  This may not be 100% accurate without calibration. 
@@ -193,7 +193,7 @@ namespace time_machine
          *  \param channel desired channel to update. 0 is both, otherwise 1 or 2 are valid.
          *  \param voltage value in Volts that you'd like to write to the DAC. The valid range is 0-5V.
          */
-        void WriteCvOut(const int channel, float voltage);
+        // void WriteCvOut(const int channel, float voltage);
 
         /** Here are some wrappers around libDaisy Static functions 
          *  to provide simpler syntax to those who prefer it. */
