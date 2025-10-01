@@ -18,7 +18,8 @@ using namespace patch_sm;
 #define DELAY_SLIDERS ADC_12
 
 #define DRY_VCA CV_4
-#define DELAY_VCAS CV_5
+#define DELAY_VCA_GROUP1 CV_5
+#define DELAY_VCA_GROUP2 CV_6
 
 namespace oam
 {

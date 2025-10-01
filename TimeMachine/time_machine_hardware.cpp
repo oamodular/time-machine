@@ -328,10 +328,17 @@ namespace time_machine
             {
                 case CV_5:
                     adc_config[i].InitMux(
-                        adc_pins[i], 8,
-                        TimeMachineHardware::B7,
-                        TimeMachineHardware::B8,
-                        TimeMachineHardware::C10
+                        adc_pins[i], 4,
+                        TimeMachineHardware::C10,
+                        TimeMachineHardware::C1
+                    );
+                    break;
+
+                case CV_6:
+                    adc_config[i].InitMux(
+                        adc_pins[i], 4,
+                        TimeMachineHardware::C10,
+                        TimeMachineHardware::C1
                     );
                     break;
 
@@ -508,8 +515,10 @@ namespace time_machine
     float TimeMachineHardware::GetVcaValue(int idx) {
         if(idx==0) {
             return adc.GetFloat(DRY_VCA);
+        } else if (idx <= 4) {
+            return adc.GetMuxFloat(DELAY_VCA_GROUP1, idx - 1);
         } else {
-            return adc.GetMuxFloat(DELAY_VCAS, idx - 1);
+            return adc.GetMuxFloat(DELAY_VCA_GROUP2, idx - 5);
         }
     }
 
