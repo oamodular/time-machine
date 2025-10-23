@@ -64,8 +64,6 @@ float skewKnob = 0.0;
 float drySlider = 0.0;
 float delaySliders = 0.0;
 
-float vcaIn[9];
-
 // calibration offsets for CV
 float timeCvOffset = 0.0;
 float feedbackCvOffset = 0.0;
@@ -100,15 +98,6 @@ void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, s
 	timeCv = clamp(hw.GetAdcValue(TIME_CV) - timeCvOffset, -1, 1);
 	feedbackCv = clamp(hw.GetAdcValue(FEEDBACK_CV) - feedbackCvOffset, -1, 1);
 	skewCv = clamp(hw.GetAdcValue(SKEW_CV) - skewCvOffset, -1, 1);
-	vcaIn[0] = clamp(hw.GetAdcValue(DRY_VCA), 0, 1);
-	vcaIn[1] = 1.0;
-	vcaIn[2] = 1.0;
-	vcaIn[3] = 1.0;
-	vcaIn[4] = 1.0;
-	vcaIn[5] = 1.0;
-	vcaIn[6] = 1.0;
-	vcaIn[7] = 1.0;
-	vcaIn[8] = clamp(hw.GetAdcValue(CV_7), 0, 1);
 	
 	drySlider = minMaxSlider(1.0 - hw.GetAdcValue(DRY_SLIDER));
 

@@ -516,8 +516,10 @@ namespace time_machine
         if(idx==0) {
             return adc.GetFloat(DRY_VCA);
         } else if (idx <= 4) {
+            // return adc.GetFloat(DELAY_VCA_GROUP1);
             return adc.GetMuxFloat(DELAY_VCA_GROUP1, idx - 1);
         } else {
+            // return adc.GetFloat(DELAY_VCA_GROUP2);
             return adc.GetMuxFloat(DELAY_VCA_GROUP2, idx - 5);
         }
     }
