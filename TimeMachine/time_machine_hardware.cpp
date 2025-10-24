@@ -362,16 +362,31 @@ namespace time_machine
         /** Control Init */
         for(size_t i = 0; i < ADC_LAST; i++)
         {
-            if(i < ADC_9) {
-                controls[i].InitBipolarCv(adc.GetPtr(i), callback_rate_);
-            } else {
-                if(i < ADC_12) {
+            switch (i) {
+                case CV_5:
+                case CV_6:
+                    for(int muxChannel = 0; muxChannel < 4; muxChannel++) {
+                        controls[i].InitBipolarCv(adc.GetMuxPtr(i, muxChannel), callback_rate_);
+                    }
+                    break;
+                case CV_1:
+                case CV_2:
+                case CV_3:
+                case CV_4:
+                case CV_7:
+                case CV_8:
+                    controls[i].InitBipolarCv(adc.GetPtr(i), callback_rate_);
+                    break;
+                case ADC_9:
+                case ADC_10:
+                case ADC_11:
                     controls[i].Init(adc.GetPtr(i), callback_rate_);
-                } else {
-                    for(int muxChannel=0; muxChannel<8; muxChannel++) {
+                    break;
+                case ADC_12:
+                    for(int muxChannel = 0; muxChannel < 8; muxChannel++) {
                         controls[i].Init(adc.GetMuxPtr(i, muxChannel), callback_rate_);
                     }
-                }
+                    break;
             }
         }
 
