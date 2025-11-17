@@ -528,15 +528,27 @@ namespace time_machine
     }
 
     float TimeMachineHardware::GetVcaValue(int idx) {
+        float v;
+
         if(idx==0) {
-            return adc.GetFloat(DRY_VCA);
+            v = adc.GetFloat(DRY_VCA);
         } else if (idx <= 4) {
-            // return adc.GetFloat(DELAY_VCA_GROUP1);
-            return adc.GetMuxFloat(DELAY_VCA_GROUP1, idx - 1);
+            v = adc.GetMuxFloat(DELAY_VCA_GROUP1, idx - 1);
         } else {
-            // return adc.GetFloat(DELAY_VCA_GROUP2);
-            return adc.GetMuxFloat(DELAY_VCA_GROUP2, idx - 5);
+            v = adc.GetMuxFloat(DELAY_VCA_GROUP2, idx - 5);
         }
+
+        // invert
+        v = 1.0 - v;
+
+        // clamp
+        v = std::max(0.503f, std::min(0.997f, v));
+
+        // scale
+        v = v - 0.503;
+        v = v * 2.0242914979757;
+
+        return v;
     }
 
     dsy_gpio_pin TimeMachineHardware::GetPin(const PinBank bank, const int idx)
