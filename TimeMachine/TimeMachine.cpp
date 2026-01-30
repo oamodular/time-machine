@@ -64,8 +64,6 @@ float skewKnob = 0.0;
 float drySlider = 0.0;
 float delaySliders = 0.0;
 
-float vcaIn[9];
-
 // calibration offsets for CV
 float timeCvOffset = 0.0;
 float feedbackCvOffset = 0.0;
@@ -100,15 +98,6 @@ void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, s
 	timeCv = clamp(hw.GetAdcValue(TIME_CV) - timeCvOffset, -1, 1);
 	feedbackCv = clamp(hw.GetAdcValue(FEEDBACK_CV) - feedbackCvOffset, -1, 1);
 	skewCv = clamp(hw.GetAdcValue(SKEW_CV) - skewCvOffset, -1, 1);
-	vcaIn[0] = clamp(hw.GetAdcValue(DRY_VCA), 0, 1);
-	vcaIn[1] = 1.0;
-	vcaIn[2] = 1.0;
-	vcaIn[3] = 1.0;
-	vcaIn[4] = 1.0;
-	vcaIn[5] = 1.0;
-	vcaIn[6] = 1.0;
-	vcaIn[7] = 1.0;
-	vcaIn[8] = clamp(hw.GetAdcValue(CV_7), 0, 1);
 	
 	drySlider = minMaxSlider(1.0 - hw.GetAdcValue(DRY_SLIDER));
 
@@ -263,7 +252,7 @@ int main(void)
 		}
 		hw.PrintLine("%d", i);
 		System::Delay(ledSeqDelay);
-	}
+	}	
 
 	if(shouldCalibrate()) {
 
@@ -331,10 +320,10 @@ int main(void)
 		hw.PrintLine("GATE IN: %d", hw.gate_in_2.State());
 
 		hw.PrintLine("GATE IN: %d", hw.gate_in_1.State());
-		hw.PrintLine("CV IN 1: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_4)));
-		hw.PrintLine("CV IN 2: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_5)));
-		hw.PrintLine("CV IN 3: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_6)));
-		hw.PrintLine("CV IN 4: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_7)));
+		hw.PrintLine("CV IN 4: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_4)));
+		hw.PrintLine("CV IN 5: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_5)));
+		hw.PrintLine("CV IN 6: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_6)));
+		hw.PrintLine("CV IN 7: " FLT_FMT(6), FLT_VAR(6, hw.GetAdcValue(CV_7)));
 
 		hw.PrintLine("TIME_CAL: " FLT_FMT(6), FLT_VAR(6, savedCalibrationData.timeCvOffset));
 		hw.PrintLine("FEEDBACK_CAL: " FLT_FMT(6), FLT_VAR(6, savedCalibrationData.feedbackCvOffset));
@@ -351,8 +340,13 @@ int main(void)
 
 		hw.PrintLine("DROPPED FRAMES: %d", droppedFrames);
 
+
 		for(int i=0; i<9; i++) {
-			hw.PrintLine("%d: " FLT_FMT(6), i, FLT_VAR(6, minMaxSlider(1.0 - hw.GetSliderValue(i))));
+			hw.PrintLine("VCA %d: " FLT_FMT(6), i, FLT_VAR(6, hw.GetVcaValue(i)));
+		}
+
+		for(int i=0; i<9; i++) {
+			hw.PrintLine("Slider %d: " FLT_FMT(6), i, FLT_VAR(6, minMaxSlider(1.0 - hw.GetSliderValue(i))));
 		}
 
 		hw.PrintLine("");
