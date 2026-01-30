@@ -201,21 +201,6 @@ int main(void)
 	hw.Init();
 	hw.SetAudioBlockSize(4); // number of samples handled per callback
 
-	// Check for VCA Expander
-	// GPIO cv_in7, cv_out1;
-	// cv_in7.Init(DaisyPatchSM::C8, GPIO::Mode::INPUT);
-	// cv_out1.Init(DaisyPatchSM::C10, GPIO::Mode::OUTPUT);
-	// hw.PrintLine("X: %d", cv_in7.Read());
-	// cv_out1.Write(true);
-	// System::Delay(1000);
-	// hw.PrintLine("XX: %d", cv_in7.Read());
-	// cv_out1.Write(false);
-	// System::Delay(1000);
-	// hw.PrintLine("XXX: %d", cv_in7.Read());
-	// cv_out1.Write(true);
-	// System::Delay(1000);
-	// hw.PrintLine("XXXX: %d", cv_in7.Read());
-
 	dsy_gpio_pin gatePin = DaisyPatchSM::B9;
 	gate.Init(&gatePin);
 

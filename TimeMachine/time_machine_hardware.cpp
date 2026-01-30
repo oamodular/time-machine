@@ -528,6 +528,10 @@ namespace time_machine
     }
 
     float TimeMachineHardware::GetVcaValue(int idx) {
+
+        if(!gate_in_1.State())
+            return 1.0f;
+
         float v;
 
         if(idx==0) {
