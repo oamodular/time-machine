@@ -153,13 +153,13 @@ void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, s
 		// let last 8 slider time/amp/blur values for left channel time machine instance
         timeMachine.timeMachineLeft.readHeads[i-1].Set(
             spread((i / 8.0), distribution) * time,
-            max(0.0f, minMaxSlider((1.0f - hw.GetSliderValue(i)) * hw.GetVcaValue(i))),
+            max(0.0f, minMaxSlider((hw.GetSliderValue(i)) * hw.GetVcaValue(i))),
 						max(0., feedback-1.0)
         );
 		// let last 8 slider time/amp/blur values for right channel time machine instance
 		timeMachine.timeMachineRight.readHeads[i-1].Set(
             spread((i / 8.0), distribution) * time,
-            max(0.0f, minMaxSlider((1.0f - hw.GetSliderValue(i)) * hw.GetVcaValue(i))),
+            max(0.0f, minMaxSlider((hw.GetSliderValue(i)) * hw.GetVcaValue(i))),
 						max(0., feedback-1.0)
         );
 	}
