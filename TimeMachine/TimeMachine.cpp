@@ -199,7 +199,7 @@ int main(void)
 {
 	// init time machine hardware
 	hw.Init();
-	hw.SetAudioBlockSize(4); // number of samples handled per callback
+	hw.SetAudioBlockSize(16); // number of samples handled per callback
 
 	dsy_gpio_pin gatePin = DaisyPatchSM::B9;
 	gate.Init(&gatePin);
