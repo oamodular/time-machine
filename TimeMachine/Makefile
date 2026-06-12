@@ -8,6 +8,9 @@ USE_DAISYSP_LGPL=1
 # Sources
 CPP_SOURCES = TimeMachine.cpp time_machine_hardware.cpp
 
+# Optimize
+# OPT = -Os
+
 # Library Locations
 LIBDAISY_DIR = ../DaisyExamples/libDaisy/
 DAISYSP_DIR = ../DaisyExamples/DaisySP/
