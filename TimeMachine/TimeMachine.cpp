@@ -199,7 +199,7 @@ int main(void)
 {
 	// init time machine hardware
 	hw.Init();
-	hw.SetAudioBlockSize(4); // number of samples handled per callback
+	hw.SetAudioBlockSize(7); // number of samples handled per callback
 
 	dsy_gpio_pin gatePin = DaisyPatchSM::B9;
 	gate.Init(&gatePin);
@@ -245,14 +245,14 @@ int main(void)
 
 	// LED startup sequence
 	int ledSeqDelay = 100;
-	for(int i=0; i<9; i++) {
+	for(int i=8; i>=0; i--) {
 		for(int j=0; j<9; j++) {
 			leds[j].Set(j == i ? 1.0 : 0.0);
 			leds[j].Update();
 		}
 		hw.PrintLine("%d", i);
 		System::Delay(ledSeqDelay);
-	}	
+	}
 
 	if(shouldCalibrate()) {
 
