@@ -91,15 +91,15 @@ void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, s
 	hw.ProcessAllControls();
 
 	// populate/update global CV/knob vars (time is slewed to reduce noise at large time values)
-	timeKnob = minMaxKnob(1.0 - hw.GetAdcValue(TIME_KNOB), 0.0008);
-	feedbackKnob = fourPointWarp(1.0 - minMaxKnob(hw.GetAdcValue(FEEDBACK_KNOB), 0.028));
-	skewKnob = fourPointWarp(1.0 - minMaxKnob(hw.GetAdcValue(SKEW_KNOB), 0.0008));
+	timeKnob = minMaxKnob(hw.GetAdcValue(TIME_KNOB), 0.0008);
+	feedbackKnob = fourPointWarp(minMaxKnob(hw.GetAdcValue(FEEDBACK_KNOB), 0.028));
+	skewKnob = fourPointWarp(minMaxKnob(hw.GetAdcValue(SKEW_KNOB), 0.0008));
 
 	timeCv = clamp(hw.GetAdcValue(TIME_CV) - timeCvOffset, -1, 1);
 	feedbackCv = clamp(hw.GetAdcValue(FEEDBACK_CV) - feedbackCvOffset, -1, 1);
 	skewCv = clamp(hw.GetAdcValue(SKEW_CV) - skewCvOffset, -1, 1);
 	
-	drySlider = minMaxSlider(1.0 - hw.GetAdcValue(DRY_SLIDER));
+	drySlider = minMaxSlider(hw.GetAdcValue(DRY_SLIDER));
 
 	// calculate time based on clock if present, otherwise simple time
 	float time = 0.0; 
